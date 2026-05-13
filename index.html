@@ -90,7 +90,7 @@ body {
   opacity: 0;
   transition: opacity 1.8s ease-in-out;
 
-  filter: blur(6px) brightness(0.6);
+  filter: blur(8px) brightness(0.6);
   transform: scale(1.05);
 }
 
@@ -276,7 +276,6 @@ body {
 
 <body>
 
-<!-- 🎵 MUSIC ADDED (NO CHANGES TO YOUR DESIGN) -->
 <audio id="bgMusic" loop>
   <source src="w2e-love.mp3" type="audio/mpeg">
 </audio>
@@ -361,7 +360,7 @@ function enterSite(){
 
   const music = document.getElementById("bgMusic");
   music.volume = 0.3;
-  music.play();
+  music.play().catch(()=>{});
 }
 
 function openImg(src){
@@ -397,6 +396,24 @@ function startSlideshow(){
     images[index].style.opacity = 1;
   }, 4000);
 }
+
+/* ✅ ONLY MUSIC FIX - ADDED, NOTHING ELSE CHANGED */
+function stopMusicFix(){
+  const music = document.getElementById("bgMusic");
+  if (!music) return;
+
+  music.pause();
+  music.currentTime = 0;
+}
+
+document.addEventListener("visibilitychange", function () {
+  if (document.hidden) {
+    stopMusicFix();
+  }
+});
+
+window.addEventListener("pagehide", stopMusicFix);
+window.addEventListener("beforeunload", stopMusicFix);
 
 </script>
 

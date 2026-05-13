@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+#introScreen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #2b2622, #3b2f2a, #5a463d, #1f1a17);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 9999;
+  color: white;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.intro-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 58px;
+}
+
+.intro-content button {
+  padding: 14px 36px;
+  border: none;
+  border-radius: 30px;
+  background: white;
+  color: #111;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.intro-content button:hover {
+  transform: scale(1.08);
+}
+
+#mainScreen {
+  display: none;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  color: #f5f1eb;
+
+  animation: fadeIn 1.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.bg-slideshow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bg-slideshow img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+
+  filter: blur(8px) brightness(0.6);
+  transform: scale(1.05);
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: linear-gradient(
+    135deg,
+    rgba(10,10,10,0.75),
+    rgba(25,20,15,0.55),
+    rgba(255,255,255,0.05)
+  );
+}
+
+#mainScreen > *:not(.bg-slideshow):not(.bg-overlay) {
+  position: relative;
+  z-index: 2;
+}
+
+.hero {
+  height: 65vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  animation: zoomSlow 10s infinite alternate ease-in-out;
+}
+
+@keyframes zoomSlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+}
+
+.details {
+  padding: 30px;
+  text-align: center;
+  transition: 0.3s ease;
+
+  animation: slideUp 1s ease;
+}
+
+.details:hover {
+  transform: scale(1.01);
+}
+
+.section-title,
+.section-subtitle,
+.section-info,
+.days-title {
+  animation: slideUp 1s ease both;
+}
+
+.section-subtitle { animation-delay: 0.3s; }
+.section-info { animation-delay: 0.4s; }
+.days-title { animation-delay: 0.6s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 50px;
+}
+
+.section-subtitle {
+  font-style: italic;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+.section-info {
+  font-size: 20px;
+  line-height: 1.9;
+}
+
+.days-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 34px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.countdown {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.time-box {
+  background: rgba(255,255,255,0.08);
+  padding: 14px;
+  border-radius: 14px;
+  min-width: 90px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.gallery {
+  column-count: 3;
+  column-gap: 12px;
+  padding: 25px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.gallery img {
+  width: 100%;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.35s ease;
+  break-inside: avoid;
+}
+
+.gallery img:hover {
+  transform: scale(1.05) rotate(0.3deg);
+  filter: brightness(1.1);
+}
+
+#imgPopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#imgPopup img {
+  width: 90%;
+  max-width: 650px;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    column-count: 2;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 MUSIC ADDED (NO CHANGES TO YOUR DESIGN) -->
+<audio id="bgMusic" loop>
+  <source src="w2e-love.mp3" type="audio/mpeg">
+</audio>
+
+<div id="introScreen">
+  <div class="intro-content">
+    <h1>A Day to Remember</h1>
+    <button onclick="enterSite()">Enter</button>
+  </div>
+</div>
+
+<div id="mainScreen">
+
+  <div class="bg-slideshow">
+    <img class="bg" src="mae.jpg">
+    <img class="bg" src="yesha.jpg">
+    <img class="bg" src="1.jpg">
+    <img class="bg" src="2.jpg">
+    <img class="bg" src="3.jpg">
+    <img class="bg" src="4.jpg">
+  </div>
+
+  <div class="bg-overlay"></div>
+
+  <div class="hero">
+    <img src="mae.jpg">
+    <div class="hero-text"></div>
+  </div>
+
+  <div class="details">
+
+    <div class="section-title">Debut Celebration</div>
+    <div class="section-subtitle">Save the date • Memories • Moments</div>
+
+    <div class="section-info">
+      <b>Venue:</b> Marquez Residencia, San Jose City, Nueva Ecija<br>
+      <b>Date of Celebration:</b> June 6, 2026<br>
+      <b>Birthday:</b> June 9, 2026<br>
+      <b>Time:</b> 3:00 PM
+    </div>
+
+    <div class="days-title">Days 'till my debut</div>
+
+    <div class="countdown">
+      <div class="time-box"><h3 id="days">0</h3><span>Days</span></div>
+      <div class="time-box"><h3 id="hours">0</h3><span>Hours</span></div>
+      <div class="time-box"><h3 id="minutes">0</h3><span>Minutes</span></div>
+      <div class="time-box"><h3 id="seconds">0</h3><span>Seconds</span></div>
+    </div>
+
+  </div>
+
+  <div class="gallery">
+    <img src="yesha.jpg" onclick="openImg(this.src)">
+    <img src="1.jpg" onclick="openImg(this.src)">
+    <img src="2.jpg" onclick="openImg(this.src)">
+    <img src="3.jpg" onclick="openImg(this.src)">
+    <img src="4.jpg" onclick="openImg(this.src)">
+    <img src="mae.jpg" onclick="openImg(this.src)">
+    <img src="5.jpg" onclick="openImg(this.src)">
+    <img src="6.jpg" onclick="openImg(this.src)">
+    <img src="7.jpg" onclick="openImg(this.src)">
+    <img src="8.jpg" onclick="openImg(this.src)">
+    <img src="9.jpg" onclick="openImg(this.src)">
+    <img src="10.jpg" onclick="openImg(this.src)">
+    <img src="11.jpg" onclick="openImg(this.src)">
+    <img src="12.jpg" onclick="openImg(this.src)">
+  </div>
+
+</div>
+
+<div id="imgPopup" onclick="closeImg()">
+  <img id="popupImg">
+</div>
+
+<script>
+
+function enterSite(){
+  document.getElementById("introScreen").style.display="none";
+  document.getElementById("mainScreen").style.display="block";
+  startSlideshow();
+
+  const music = document.getElementById("bgMusic");
+  music.volume = 0.3;
+  music.play();
+}
+
+function openImg(src){
+  document.getElementById("imgPopup").style.display="flex";
+  document.getElementById("popupImg").src = src;
+}
+
+function closeImg(){
+  document.getElementById("imgPopup").style.display="none";
+}
+
+const targetDate = new Date("June 6, 2026 00:00:00").getTime();
+
+setInterval(()=>{
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  document.getElementById("days").innerText = Math.floor(distance/(1000*60*60*24));
+  document.getElementById("hours").innerText = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  document.getElementById("minutes").innerText = Math.floor((distance%(1000*60*60))/(1000*60));
+  document.getElementById("seconds").innerText = Math.floor((distance%(1000*60))/1000);
+},1000);
+
+let index = 0;
+const images = document.querySelectorAll(".bg");
+
+function startSlideshow(){
+  images[0].style.opacity = 1;
+
+  setInterval(()=>{
+    images.forEach(img => img.style.opacity = 0);
+    index = (index + 1) % images.length;
+    images[index].style.opacity = 1;
+  }, 4000);
+}
+
+</script>
+
+</body>
+</html>
